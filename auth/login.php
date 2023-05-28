@@ -11,8 +11,8 @@ $password = sha1($_POST["password"]);
 //$count = $stmt->rowCount();
 
 //result($count);
-getDate("users","users_email=?  AND users_password= ? And users_approve=1",array($email, $password));
+getData("users","users_email=?  AND users_password= ? And users_approve=1",array($email, $password));
 
-
+?>
 
 
