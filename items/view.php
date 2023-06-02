@@ -2,8 +2,11 @@
 
 include "../connect.php";
 $itemscat=filterRequest("category_id");
-$allitems=array();
-$items=array();
+
+$allitems=getAllData("items","items_cat =$itemscat");
+
+
+/*$items=array();
 $itemsdiscount=array();
 $itemssoldout=array();
 $itemsdiscountsoldout=array();
@@ -28,12 +31,12 @@ if($itemsdiscountsoldout!=null){
 if($itemssoldout!=null){
     $allitems["itemssoldout"]=$itemssoldout;
 }
-}
+}*/
 
 
 //$allitems["itemsdiscount"]=$itemsdiscount;
 //$allitems["itemssoldout"]=$itemssoldout;
 //$allitems["itemsdiscountsoldout"]=$itemsdiscountsoldout;
-echo json_encode($allitems);
+
 
 ?>
