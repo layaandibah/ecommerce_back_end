@@ -8,10 +8,33 @@ $alldata=array();
 $alldata["status"]="success";
 
 if($itemsType < 0){
-    getAllData("allitems","categories_id =$itemscat",null);
+    $stmt     = $con->prepare("SELECT distinct `type_name`,`items_type` FROM allitems WHERE `categories_id`=$itemscat");
+    $stmt->execute();
+    $types     = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $alldata["types"]=$types;
+    $data = getAllData("allitems","categories_id =$itemscat",null,false);
+    $alldata["data"]=$data;
+    if($types!=null && $data!=null){
+        echo json_encode($alldata);
+    }else{
+        $alldata["status"]="failure";
+        echo json_encode($alldata);
+    }
+    }else{
+        getAllData("allitems","`items_type`=$itemsType",null);
+    }
+   /* $data = getAllData("allitems","categories_id =$itemscat",false);
+    if($data!=null && $types !=null){
+        $alldata["data"]=$data;
+        $alldata["types"]=$types;
+        echo json_encode($alldata);
+    }else{
+        $alldata["status"]="failure";
+        echo json_encode($alldata);
+    }
 }else{
     getAllData("allitems","`items_type`=$itemsType",null);
-}
+}*/
 
 
 
