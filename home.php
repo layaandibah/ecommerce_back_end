@@ -2,34 +2,31 @@
 
 include "connect.php";
 
+$userId=filterRequest("user_id");
+
 $alldata=array();
 $alldata["status"]="success";
 
 $allcategories=getAllData("categories",null,null,false);
-$allitemsdiscount=getAllData("allitems","items_discount!=0 AND items_active=1",null,false);
-$allitemssoldout=getAllData("allitems","items_active=0 AND items_discount=0",null,false);
-$allitemsdiscountandsoldout=getAllData("allitems","items_active=0 AND items_discount!=0",null,false);
-if($allcategories==null && $allitemsdiscount ==null && $allitemssoldout==null && $allitemsdiscountandsoldout==null){
+ //-------------allItemsDiscount-------------
+ $stmt1     = $con->prepare("SELECT allitems.* , 1 as favorite FROM allitems INNER JOIN
+ favorite ON allitems.items_id = favorite.favorite_itemsid AND favorite.favorite_usersid=$userId
+ UNION ALL SELECT allitems.* , 0 as favorite FROM allitems
+WHERE allitems.items_id != (SELECT allitems.items_id FROM allitems INNER JOIN 
+favorite ON allitems.items_id = favorite.favorite_itemsid AND favorite.favorite_usersid=$userId)");
+ $stmt1->execute();
+ $allitems = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+ //--------------------------------
+if($allcategories==null && $allitems ==null){
     $alldata["status"]="failure";
     }else{
     $alldata["status"]="success";
     if($allcategories!=null){
         $alldata["categories"]=$allcategories;
     }
-    if($allitemsdiscount!=null){
-        $alldata["itemsdiscount"]=$allitemsdiscount;
-    }
-    if($allitemsdiscountandsoldout!=null){
-        $alldata["itemsdiscountsoldout"]=$allitemsdiscountandsoldout;
-    }
-    if($allitemssoldout!=null){
-        $alldata["itemssoldout"]=$allitemssoldout;
+    if($allitems!=null){
+        $alldata["items"]=$allitems;
     }
     }
-//$alldata["categories"]=$allcategories;
-//$alldata["itemsdiscount"]=$allitemsdiscount;
-//$alldata["itemssoldout"]=$allitemssoldout;
-//$alldata["itemsdiscountsoldout"]=$allitemsdiscountandsoldout;
-
-echo json_encode($alldata);
+    echo json_encode($alldata);
 ?>
