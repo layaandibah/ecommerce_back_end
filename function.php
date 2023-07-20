@@ -79,7 +79,7 @@ function insertData($table, $data, $json = true)
     if ($count > 0) {
         echo json_encode(array("status" => "success"));
     } else {
-        echo json_encode(array("status" => "failure"));
+        echo json_encode(array("status" => "failure11"));
     }
   }
     return $count;
@@ -97,7 +97,6 @@ function updateData($table, $data, $where, $json = true)
         $cols[] = "`$key` =  ? ";
     }
     $sql = "UPDATE $table SET " . implode(', ', $cols) . " WHERE $where";
-
     $stmt = $con->prepare($sql);
     $stmt->execute($vals);
     $count = $stmt->rowCount();

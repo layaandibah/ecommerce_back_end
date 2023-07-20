@@ -7,13 +7,12 @@ $phone = filterRequest("phone");
 $password = sha1($_POST["password"]);
 $verifycode = rand(10000,99999);
 
-$stmt = $con->prepare("SELECT * FROM users WHERE users_email=?  OR users_phone= ?");
-$stmt->execute(array($email, $phone));
+$stmt = $con->prepare("SELECT * FROM users WHERE users_email=?  And users_approve=1");
+$stmt->execute(array($email));
 $count = $stmt->rowCount();
 if ($count > 0) {
     failure("phone or email");
 } else {
-
     /* $data=array(
     "users_name" => $name,
     "users_password" => $password,

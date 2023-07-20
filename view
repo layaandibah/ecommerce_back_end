@@ -1,0 +1,1 @@
+CREATE VIEW allitemscart as SELECT items.*,cart.*,cart.itemscount*items.items_price as totalprice FROM users,items,cart WHERE items.items_id=cart.cart_itemsid and users.users_id=cart.cart_usersid
